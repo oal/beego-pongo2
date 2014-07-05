@@ -32,7 +32,7 @@ func Render(beegoCtx *context.Context, tmpl string, ctx Context) {
 	}
 
 	pongoContext := p2.Context(ctx)
-	err := template.ExecuteRW(beegoCtx.ResponseWriter, &pongoContext)
+	err := template.ExecuteRW(beegoCtx.ResponseWriter, pongoContext)
 	if err != nil {
 		panic(err)
 	}
