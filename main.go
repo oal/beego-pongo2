@@ -12,7 +12,7 @@ type Context map[string]interface{}
 var templates = map[string]*p2.Template{}
 var mutex = &sync.RWMutex{}
 
-var devMode = beego.AppConfig.String("runmode") == "dev"
+var devMode bool
 
 // Render takes a Beego context, template name and a Context (map[string]interface{}).
 // The template is parsed and cached, and gets executed into beegoCtx's ResponseWriter.
@@ -39,4 +39,9 @@ func Render(beegoCtx *context.Context, tmpl string, ctx Context) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func init() {
+	devMode = beego.AppConfig.String("runmode") == "dev"
+	beego.AutoRender = false
 }
