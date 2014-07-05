@@ -11,13 +11,18 @@ type Context map[string]interface{}
 var templates = map[string]*p2.Template{}
 var mutex = &sync.RWMutex{}
 
+// Render takes a Beego context, template name and a Context (map[string]interface{}).
+// The template is parsed and cached, and gets executed into beegoCtx's ResponseWriter.
+//
+// Templates are looked up in `templates/` instead of Beego's default `views/` so that
+// Beego doesn't attempt to load and parse our templates with `html/template`.
 func Render(begoCtx *context.Context, tmpl string, ctx Context) {
 	mutex.RLock()
 	template, ok := templates[tmpl]
 	mutex.RUnlock()
 	if !ok {
 		var err error
-		template, err = p2.FromFile("views/" + tmpl)
+		template, err = p2.FromFile("templates/" + tmpl)
 		if err != nil {
 			panic(err)
 		}
