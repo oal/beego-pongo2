@@ -6,10 +6,12 @@ import (
 	"sync"
 )
 
+type Context map[string]interface{}
+
 var templates = map[string]*p2.Template{}
 var mutex = &sync.RWMutex{}
 
-func Render(begoCtx *context.Context, tmpl string, ctx *p2.Context) {
+func Render(begoCtx *context.Context, tmpl string, ctx Context) {
 	mutex.RLock()
 	template, ok := templates[tmpl]
 	mutex.RUnlock()
@@ -24,7 +26,8 @@ func Render(begoCtx *context.Context, tmpl string, ctx *p2.Context) {
 		mutex.Unlock()
 	}
 
-	err := template.ExecuteRW(begoCtx.ResponseWriter, ctx)
+	pongoContext := p2.Context(ctx)
+	err := template.ExecuteRW(begoCtx.ResponseWriter, &pongoContext)
 	if err != nil {
 		panic(err)
 	}
