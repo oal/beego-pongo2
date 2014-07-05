@@ -16,7 +16,7 @@ var mutex = &sync.RWMutex{}
 //
 // Templates are looked up in `templates/` instead of Beego's default `views/` so that
 // Beego doesn't attempt to load and parse our templates with `html/template`.
-func Render(begoCtx *context.Context, tmpl string, ctx Context) {
+func Render(beegoCtx *context.Context, tmpl string, ctx Context) {
 	mutex.RLock()
 	template, ok := templates[tmpl]
 	mutex.RUnlock()
@@ -32,7 +32,7 @@ func Render(begoCtx *context.Context, tmpl string, ctx Context) {
 	}
 
 	pongoContext := p2.Context(ctx)
-	err := template.ExecuteRW(begoCtx.ResponseWriter, &pongoContext)
+	err := template.ExecuteRW(beegoCtx.ResponseWriter, &pongoContext)
 	if err != nil {
 		panic(err)
 	}
