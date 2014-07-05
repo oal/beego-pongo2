@@ -1,6 +1,7 @@
 package pongo2
 
 import (
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	p2 "github.com/flosch/pongo2"
 	"sync"
@@ -11,6 +12,8 @@ type Context map[string]interface{}
 var templates = map[string]*p2.Template{}
 var mutex = &sync.RWMutex{}
 
+var devMode = beego.AppConfig.String("runmode") == "dev"
+
 // Render takes a Beego context, template name and a Context (map[string]interface{}).
 // The template is parsed and cached, and gets executed into beegoCtx's ResponseWriter.
 //
@@ -20,7 +23,8 @@ func Render(beegoCtx *context.Context, tmpl string, ctx Context) {
 	mutex.RLock()
 	template, ok := templates[tmpl]
 	mutex.RUnlock()
-	if !ok {
+
+	if !ok || devMode {
 		var err error
 		template, err = p2.FromFile("templates/" + tmpl)
 		if err != nil {
