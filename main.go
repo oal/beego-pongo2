@@ -31,8 +31,7 @@ func Render(beegoCtx *context.Context, tmpl string, ctx Context) {
 		mutex.Unlock()
 	}
 
-	pongoContext := p2.Context(ctx)
-	err := template.ExecuteRW(beegoCtx.ResponseWriter, pongoContext)
+	err := template.ExecuteRW(beegoCtx.ResponseWriter, p2.Context(ctx))
 	if err != nil {
 		panic(err)
 	}
