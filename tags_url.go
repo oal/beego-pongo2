@@ -37,7 +37,7 @@ func tagURLForParser(doc *p2.Parser, start *p2.Token, arguments *p2.Parser) (p2.
 		eval, err := arguments.ParseExpression()
 		evals = append(evals, eval)
 		if err != nil {
-			return nil, arguments.Error(err.Error(), nil)
+			return nil, err
 		}
 	}
 
