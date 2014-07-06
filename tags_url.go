@@ -23,19 +23,19 @@ func (node *tagURLNode) Execute(ctx *p2.ExecutionContext) (string, error) {
 	return url, nil
 }
 
-// TagURLForParser implements a {% urlfor %} tag.
+// tagURLForParser implements a {% urlfor %} tag.
 //
 // urlfor takes one argument for the controller, as well as any number of key/value pairs for additional URL data.
 // Example: {% url "UserController.View" ":slug" "oal" %}
-func TagURLForParser(doc *p2.Parser, start *p2.Token, arguments *p2.Parser) (p2.INodeTag, error) {
+func tagURLForParser(doc *p2.Parser, start *p2.Token, arguments *p2.Parser) (p2.INodeTag, error) {
 	if (arguments.Count()-1)%2 != 0 {
 		return nil, arguments.Error("URL takes one argument for the controller and any number of optional pairs of key/value pairs.", nil)
 	}
 
-	evals := make([]p2.INodeEvaluator, arguments.Count())
-	for i, _ := range evals {
+	evals := []p2.INodeEvaluator{}
+	for arguments.Remaining() > 0 {
 		eval, err := arguments.ParseExpression()
-		evals[i] = eval
+		evals = append(evals, eval)
 		if err != nil {
 			return nil, arguments.Error(err.Error(), nil)
 		}
@@ -45,5 +45,5 @@ func TagURLForParser(doc *p2.Parser, start *p2.Token, arguments *p2.Parser) (p2.
 }
 
 func init() {
-	p2.RegisterTag("urlfor", TagURLForParser)
+	p2.RegisterTag("urlfor", tagURLForParser)
 }

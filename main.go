@@ -1,3 +1,10 @@
+// A small library that lets you use Pongo2 with Beego
+//
+// When Render is called, it will populate the render context with Beego's flash messages.
+// You can also use {% urlfor "MyController.Action" ":key" "value" %} in your templates, and
+// it'll work just like `urlfor` would with `html/template`. It takes one controller argument and
+// zero or more key/value pairs to fill the URL.
+//
 package pongo2
 
 import (
