@@ -5,11 +5,11 @@ import (
 	p2 "github.com/flosch/pongo2"
 )
 
-type tagURLNode struct {
+type tagURLForNode struct {
 	objectEvaluators []p2.INodeEvaluator
 }
 
-func (node *tagURLNode) Execute(ctx *p2.ExecutionContext) (string, error) {
+func (node *tagURLForNode) Execute(ctx *p2.ExecutionContext) (string, error) {
 	args := make([]string, len(node.objectEvaluators))
 	for i, ev := range node.objectEvaluators {
 		obj, err := ev.Evaluate(ctx)
@@ -41,7 +41,7 @@ func tagURLForParser(doc *p2.Parser, start *p2.Token, arguments *p2.Parser) (p2.
 		return nil, arguments.Error("URL takes one argument for the controller and any number of optional pairs of key/value pairs.", nil)
 	}
 
-	return &tagURLNode{evals}, nil
+	return &tagURLForNode{evals}, nil
 }
 
 func init() {

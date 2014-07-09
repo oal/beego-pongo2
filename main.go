@@ -44,6 +44,17 @@ func Render(beegoCtx *context.Context, tmpl string, ctx Context) {
 		mutex.Unlock()
 	}
 
+	var pCtx p2.Context
+	if ctx == nil {
+		pCtx = p2.Context{}
+	} else {
+		pCtx = p2.Context(ctx)
+	}
+
+	if xsrf, ok := beegoCtx.GetSecureCookie(beego.XSRFKEY, "_xsrf"); ok {
+		pCtx["_xsrf"] = xsrf
+	}
+
 	// Only override "flash" if it hasn't already been set in Context
 	if _, ok := ctx["flash"]; !ok {
 		if ctx == nil {
@@ -52,7 +63,7 @@ func Render(beegoCtx *context.Context, tmpl string, ctx Context) {
 		ctx["flash"] = readFlash(beegoCtx)
 	}
 
-	err := template.ExecuteRW(beegoCtx.ResponseWriter, p2.Context(ctx))
+	err := template.ExecuteRW(beegoCtx.ResponseWriter, pCtx)
 	if err != nil {
 		panic(err)
 	}
