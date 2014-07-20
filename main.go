@@ -63,7 +63,7 @@ func Render(beegoCtx *context.Context, tmpl string, ctx Context) {
 		ctx["flash"] = readFlash(beegoCtx)
 	}
 
-	err := template.ExecuteRW(beegoCtx.ResponseWriter, pCtx)
+	err := template.ExecuteWriter(pCtx, beegoCtx.ResponseWriter)
 	if err != nil {
 		panic(err)
 	}
