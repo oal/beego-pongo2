@@ -22,7 +22,7 @@ func (node *tagURLForNode) Execute(ctx *p2.ExecutionContext, buffer *bytes.Buffe
 	}
 
 	url := beego.UrlFor(args[0], args[1:]...)
-	
+
 	buffer.WriteString(url)
 	return nil
 }
@@ -30,7 +30,7 @@ func (node *tagURLForNode) Execute(ctx *p2.ExecutionContext, buffer *bytes.Buffe
 // tagURLForParser implements a {% urlfor %} tag.
 //
 // urlfor takes one argument for the controller, as well as any number of key/value pairs for additional URL data.
-// Example: {% url "UserController.View" ":slug" "oal" %}
+// Example: {% urlfor "UserController.View" ":slug" "oal" %}
 func tagURLForParser(doc *p2.Parser, start *p2.Token, arguments *p2.Parser) (p2.INodeTag, error) {
 	evals := []p2.INodeEvaluator{}
 	for arguments.Remaining() > 0 {
