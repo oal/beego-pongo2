@@ -8,12 +8,13 @@
 package pongo2
 
 import (
-	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/context"
-	p2 "github.com/flosch/pongo2"
 	"net/url"
 	"strings"
 	"sync"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/context"
+	p2 "gopkg.in/flosch/pongo2.v3"
 )
 
 type Context map[string]interface{}
