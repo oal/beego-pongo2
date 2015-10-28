@@ -36,7 +36,14 @@ func Render(beegoCtx *context.Context, tmpl string, ctx Context) {
 
 	if !ok || devMode {
 		var err error
-		template, err = p2.FromFile("templates/" + tmpl)
+
+		// default ViewsPath
+		prefix := beego.AppConfig.String("ViewsPath")
+		if prefix == "" {
+			prefix = "views/"
+		}
+
+		template, err = p2.FromFile(prefix + tmpl)
 		if err != nil {
 			panic(err)
 		}
