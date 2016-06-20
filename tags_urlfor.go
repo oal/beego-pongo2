@@ -26,7 +26,7 @@ func (node *tagURLForNode) Execute(ctx *p2.ExecutionContext, buffer *bytes.Buffe
 		params[i] = args[i+1]
 	}
 
-	url := beego.UrlFor(args[0], params...)
+	url := beego.URLFor(args[0], params...)
 
 	buffer.WriteString(url)
 	return nil
