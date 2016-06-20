@@ -12,7 +12,7 @@ var xsrfTemplate = p2.Must(p2.FromString(`<input type="hidden" name="_xsrf" valu
 type tagXSRFTokenNode struct{}
 
 func (node *tagXSRFTokenNode) Execute(ctx *p2.ExecutionContext, buffer *bytes.Buffer) *p2.Error {
-	if !beego.EnableXSRF {
+	if !beego.BConfig.WebConfig.EnableXSRF {
 		return nil
 	}
 

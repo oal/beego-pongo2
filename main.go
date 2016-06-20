@@ -36,7 +36,7 @@ func Render(beegoCtx *context.Context, tmpl string, ctx Context) {
 
 	if !ok || devMode {
 		var err error
-		template, err = p2.FromFile("templates/" + tmpl)
+		template, err = p2.FromFile(beego.BConfig.WebConfig.ViewsPath + "/" + tmpl)
 		if err != nil {
 			panic(err)
 		}
@@ -52,7 +52,7 @@ func Render(beegoCtx *context.Context, tmpl string, ctx Context) {
 		pCtx = p2.Context(ctx)
 	}
 
-	if xsrf, ok := beegoCtx.GetSecureCookie(beego.XSRFKEY, "_xsrf"); ok {
+	if xsrf, ok := beegoCtx.GetSecureCookie(beego.BConfig.WebConfig.XSRFKey, "_xsrf"); ok {
 		pCtx["_xsrf"] = xsrf
 	}
 
@@ -75,24 +75,24 @@ func Render(beegoCtx *context.Context, tmpl string, ctx Context) {
 // (which only has a Data field anyway).
 func readFlash(ctx *context.Context) map[string]string {
 	data := map[string]string{}
-	if cookie, err := ctx.Request.Cookie(beego.FlashName); err == nil {
+	if cookie, err := ctx.Request.Cookie(beego.BConfig.WebConfig.FlashName); err == nil {
 		v, _ := url.QueryUnescape(cookie.Value)
 		vals := strings.Split(v, "\x00")
 		for _, v := range vals {
 			if len(v) > 0 {
-				kv := strings.Split(v, "\x23"+beego.FlashSeperator+"\x23")
+				kv := strings.Split(v, "\x23"+beego.BConfig.WebConfig.FlashSeparator+"\x23")
 				if len(kv) == 2 {
 					data[kv[0]] = kv[1]
 				}
 			}
 		}
 		// read one time then delete it
-		ctx.SetCookie(beego.FlashName, "", -1, "/")
+		ctx.SetCookie(beego.BConfig.WebConfig.FlashName, "", -1, "/")
 	}
 	return data
 }
 
 func init() {
 	devMode = beego.AppConfig.String("runmode") == "dev"
-	beego.AutoRender = false
+	beego.BConfig.WebConfig.AutoRender = false
 }
